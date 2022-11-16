@@ -27,7 +27,8 @@ function SwitchButton(props) {
         text: {
             fontFamily: 'Poppins-Regular',
             color: 'white',
-            marginLeft: !props.value ? 10 * config.ratio.width : 48 * config.ratio.width
+            marginLeft: !props.value ? 10 * config.ratio.width : 48 * config.ratio.width,
+            fontSize: 27 * config.ratio.width
         },
         bt: {
             width: (40) * config.ratio.width,

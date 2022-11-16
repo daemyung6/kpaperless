@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import config from '../config.js';
 import {
-    SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     View,
     Image,
     TextInput,
     Keyboard,
+    TouchableOpacity
 } from 'react-native';
 
 import SwitchButton from '../comp/switchButton.js';
@@ -36,7 +35,7 @@ export default function Login() {
     const styles = StyleSheet.create({
         outter: {
             position: 'absolute',
-            bottom: !isClickInput ? undefined : config.APP_HEIGHT / 6,
+            bottom: !isClickInput ? undefined : config.appHeight / 6,
             width: '100%',
             height: '100%',
     
@@ -59,14 +58,14 @@ export default function Login() {
             borderColor: 'black'
         },
         title: {
-            fontFamily: 'Poppins-Bold',
+            fontFamily: config.font.Poppins[600],
             marginTop: - 66 * config.ratio.height,
             fontSize: 63 * config.ratio.width,
             textAlign: 'center',
             color: 'black'
         },
         subtitle: {
-            fontFamily: 'Poppins-Regular',
+            fontFamily: config.font.Poppins[400],
             marginTop: '-0.03%',
             fontSize: 37 * config.ratio.width,
             textAlign: 'center',
@@ -92,7 +91,7 @@ export default function Login() {
             height: '100%',
             marginLeft: 'auto',
             marginRight: 'auto',
-            fontFamily: 'Poppins-Regular',
+            fontFamily: config.font.Poppins[500],
             color: 'rgba(0, 0, 0, 0.51)',
             fontSize: 27 * config.ratio.width
         },
@@ -121,12 +120,62 @@ export default function Login() {
             width: 900 * config.ratio.width,
             marginLeft: 'auto',
             marginRight: 'auto',
+            marginTop: 65 * config.ratio.height,
+            flexDirection: 'row',
         },
-        btBox_label:{
-            flexDirection: "row",
-            flexWrap: "wrap",
-            color: '#15686D'
+        btBox_text: {
+            color: '#15686D',
+            fontSize: 27 * config.ratio.height,
         },
+        btBox_text_margin: {
+            width: 13 * config.ratio.width
+        },
+        btBox_bt_margin : {
+            marginLeft: 33 * config.ratio.width
+        },
+        logiButton: {
+            width: 900 * config.ratio.width,
+            height: 94 * config.ratio.height,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            borderRadius: config.appHeight,
+            backgroundColor: '#002DCC',
+            marginTop: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 83 * config.ratio.height,
+        },
+        logiButton_text: {
+            fontFamily: config.font.Poppins[600],
+            fontSize: 39 * config.ratio.width,
+            color: 'white'
+        },
+        footer: {
+            width: 900 * config.ratio.width,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: 33 * config.ratio.height,
+            flexDirection: 'row',
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        footer_text: {
+            color: 'rgba(0, 0, 0, 0.8)',
+            fontFamily: config.font.Poppins[400],
+            fontSize: 27 * config.ratio.width
+        },
+        link_bt: {
+            fontFamily: config.font.Poppins[700],
+            color: '#15686D',
+            fontSize: 27 * config.ratio.width,
+        },
+        footer_bar: {
+            width : 3 * config.ratio.width,
+            height: 56 * config.ratio.height,
+            marginLeft : 44 * config.ratio.width,
+            marginRight : 44 * config.ratio.width,
+            backgroundColor: '#002DCC'
+        }
     });
 
     return (
@@ -145,7 +194,6 @@ export default function Login() {
                 <TextInput
                     style={styles.inputBox_input}
                     placeholder='사원번호를 입력해 주세요'
-                    
                 />
                 <Image
                     style={styles.inputBox_icon}
@@ -176,11 +224,35 @@ export default function Login() {
                 />
             </View>
             <View style={styles.btBox}>
-                <Text>자동로그인</Text>
-                <SwitchButton value={auto_login_value} onPress={auto_login_onclick} />
-                <Text>사원번호 저장</Text>
-                <SwitchButton value={save_userID_value} onPress={save_userID_onclick} />
+                <Text style={styles.btBox_text}>자동로그인</Text>
+                <View style={styles.btBox_text_margin} />
+                <SwitchButton 
+                    style={styles.btBox_bt}
+                    value={auto_login_value} 
+                    onPress={auto_login_onclick} 
+                />
+                <View style={styles.btBox_bt_margin} />
+                <Text style={styles.btBox_text}>사원번호 저장</Text>
+                <View style={styles.btBox_text_margin} />
+                <SwitchButton 
+                    value={save_userID_value} 
+                    onPress={save_userID_onclick} 
+                />
             </View>
+            <TouchableOpacity style={styles.logiButton}>
+                <Text style={styles.logiButton_text}>Login</Text>
+            </TouchableOpacity>
+            <View style={styles.footer}>
+                <Text style={styles.footer_text}>Don’t have an account ? </Text>
+                <TouchableOpacity>
+                    <Text style={styles.link_bt}>Sign Up</Text>
+                </TouchableOpacity>
+                <View style={styles.footer_bar} />
+                <TouchableOpacity>
+                    <Text style={styles.link_bt}>Forget Password</Text>
+                </TouchableOpacity>
+            </View>
+            
         </View>
     )
 }

@@ -7,21 +7,39 @@ import {
   Text,
   useColorScheme,
   View,
+  BackHandler,
+  ToastAndroid,
 } from 'react-native';
 
 
 import Alert from './page/alert.js';
-import Login from './page/login.js';
+import * as login from './page/login.js';
+import * as createUser from './page/createUser.js';
+
+
+const pageList = {
+  login: login,
+  createUser: createUser
+}
 
 
 const App = () => {
-  const [ alertData, setAlertData ] = useState({ isView: false })
+  // const [page, setpage] = useState('login');
+  const [page, setpage] = useState('createUser');
+  pageName = page;
+  _setPage = setpage;
+
+  const [alertData, setAlertData] = useState({ isView: false })
   _alertData = alertData;
   _setAlertData = setAlertData;
 
+  
+  const Page = pageList[page].Page;
   return (
-    <View style={styles.App}> 
-      <Login />
+    <View style={styles.App}>
+
+      <Page />
+
       {alertData.isView && <Alert data={alertData} />}
     </View>
   );
@@ -51,14 +69,38 @@ export function alert(data) {
   }
   _setAlertData(returnData);
 };
+export function closeAlert() {
+  let returnData = {};
+  var keys = Object.keys(_alertData);
+  for (let i = 0; i < keys.length; i++) {
+    returnData[keys[i]] = _alertData[keys[i]];
+  }
+  returnData.isView = false;
 
-setTimeout(function() {
-  alert({
-    bold: '등록되지 않은 회원입니다.\n정식 딜러 인증을 위해 회원가입을 해주세요',
-    thin: '본 서비스는 회원가입 후 이용이 가능합니다',
-    img: 'login',
-    callback: function() {
-      console.log('callback')
+  _setAlertData(returnData);
+};
+
+export let pageName;
+let _setPage;
+export function setPage(name) {
+  _setPage(name);
+}
+
+let isReadyExit = false;
+BackHandler.addEventListener('hardwareBackPress', function () {
+  if (typeof pageList[pageName].onClickBack === 'undefined') {
+    if (!isReadyExit) {
+      ToastAndroid.show("버튼을 한번 더 누르면 종료됩니다.", ToastAndroid.SHORT);
+      isReadyExit = true;
+      setTimeout(function () {
+        isReadyExit = false;
+      }, 3000);
+      return true;
     }
-  })
-}, 1000)
+    return false;
+  }
+  if (typeof pageList[pageName].onClickBack === 'function') {
+    pageList[pageName].onClickBack();
+    return true;
+  }
+})

@@ -9,6 +9,7 @@ import {
     Button
 } from 'react-native';
 import config from '../config.js';
+import { closeAlert } from '../App.js';
 
 const imgList = {
     login : {
@@ -19,6 +20,28 @@ const imgList = {
 }
 
 function Alert(props) {
+    let img = 'login';
+    let bold = '';
+    let thin = '';
+
+    if(
+        (typeof props.data.img !== 'undefined') &&
+        (typeof imgList[props.data.img] !== 'undefined')   
+    ) {
+        img = props.data.img;
+    }
+
+    if(typeof props.data.bold !== 'undefined') {
+        bold = props.data.bold
+    }
+
+    if(typeof props.data.thin !== 'undefined') {
+        thin = props.data.thin
+    }
+
+
+
+    const innerWidth = 753 * config.ratio.width;
     const styles = StyleSheet.create({
         outter: {
             top: 0,
@@ -30,9 +53,10 @@ function Alert(props) {
             alignItems: "center",
         },
         inner: {
-            width: 753 * config.ratio.width,
+            position: 'absolute',
+            width: innerWidth,
             height: 696 * config.ratio.height,
-            backgroundColor: 'rgba(240, 240, 240, 0.6)',
+            backgroundColor: 'rgba(220, 220, 220, 0.85)',
             borderRadius: 25 * config.ratio.width
         },
         closeButton: {
@@ -64,11 +88,29 @@ function Alert(props) {
             fontSize: 20 * config.ratio.width,
             fontFamily: config.font.Inter[400],
             textAlign: 'center',
-        }
+        },
+        okButton : {
+            position: 'absolute',
+            width: 629 * config.ratio.width,
+            height: 66 * config.ratio.height,
+            left: (innerWidth - 629 * config.ratio.width) / 2,
+            bottom: 30 * config.ratio.height,
+            backgroundColor: '#1334A9',
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        okButton_text: {
+            fontFamily: config.font.Inter[700],
+            color: 'white',
+            fontSize: 25 * config.ratio.width
+        },
         
     })
     function onclickCloseButton() {
-        console.log(123);
+        closeAlert();
+        if(typeof props.data.callback === 'function') {
+            props.data.callback();
+        }
     }
 
     return (
@@ -76,18 +118,24 @@ function Alert(props) {
             <View style={styles.inner} >
                 <View style={styles.main_img_box} >
                     <Image 
-                        source={imgList[props.data.img].src} 
+                        source={imgList[img].src} 
                         style={styles.main_img}
                     />
                 </View>
                 <Text style={styles.bold}>{props.data.bold}</Text>
                 <Text style={styles.thin}>{props.data.thin}</Text>
                 
-                <TouchableOpacity>
-                    <Text>확인</Text>
+                <TouchableOpacity 
+                    style={styles.okButton}
+                    onPress={onclickCloseButton}
+                >
+                    <Text style={styles.okButton_text}>확인</Text>
                 </TouchableOpacity>
             
-                <TouchableOpacity style={styles.closeButton} onPress={onclickCloseButton}>
+                <TouchableOpacity 
+                    style={styles.closeButton} 
+                    onPress={onclickCloseButton}
+                >
                     <Image 
                         source={require('../img/alert-close-bt.png')} 
                         style={styles.closeButton_image}

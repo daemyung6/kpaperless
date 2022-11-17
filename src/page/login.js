@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import config from '../config.js';
 import {
     StyleSheet,
@@ -7,13 +7,16 @@ import {
     Image,
     TextInput,
     Keyboard,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 
 import SwitchButton from '../comp/switchButton.js';
+import { alert, setPage } from '../App.js';
 
 
-export default function Login() {
+
+export function Page() {
     const [auto_login_value, set_auto_login] = useState(false);
     function auto_login_onclick() {
         set_auto_login(!auto_login_value);
@@ -23,22 +26,39 @@ export default function Login() {
         set_save_userID(!save_userID_value)
     }
 
-    const [isClickInput, setisClickInput] = useState(false);
+    const [user_id, set_user_id] = useState('');
+    const [password, set_password] = useState('');
 
-    Keyboard.addListener('keyboardDidShow', function() {
-        setisClickInput(true);
-    });
-    Keyboard.addListener('keyboardDidHide', function() {
-        setisClickInput(false);
-    });
+    function onChangeUserID(text) {
+        set_user_id(text);
+    }
+
+    // const [isClickInput, setisClickInput] = useState(false);
+
+    // Keyboard.addListener('keyboardDidShow', function () {
+    //     setisClickInput(true);
+    // });
+    // Keyboard.addListener('keyboardDidHide', function () {
+    //     setisClickInput(false);
+    // });
+
+    function onClickLoginButton() {
+        alert({
+            img: 'login',
+            bold: '등록되지 않은 회원입니다.\n정식 딜러 인증을 위해 회원가입을 해주세요',
+            thin: '본 서비스는 회원가입 후 이용이 가능합니다',
+            callback: function () {
+                console.log('callback')
+            }
+        })
+    }
 
     const styles = StyleSheet.create({
         outter: {
             position: 'absolute',
-            bottom: !isClickInput ? undefined : config.appHeight / 6,
+            bottom: 0,
             width: '100%',
             height: '100%',
-    
         },
         backgroundImg: {
             position: 'absolute',
@@ -130,7 +150,7 @@ export default function Login() {
         btBox_text_margin: {
             width: 13 * config.ratio.width
         },
-        btBox_bt_margin : {
+        btBox_bt_margin: {
             marginLeft: 33 * config.ratio.width
         },
         logiButton: {
@@ -170,16 +190,16 @@ export default function Login() {
             fontSize: 27 * config.ratio.width,
         },
         footer_bar: {
-            width : 3 * config.ratio.width,
+            width: 3 * config.ratio.width,
             height: 56 * config.ratio.height,
-            marginLeft : 44 * config.ratio.width,
-            marginRight : 44 * config.ratio.width,
+            marginLeft: 44 * config.ratio.width,
+            marginRight: 44 * config.ratio.width,
             backgroundColor: '#002DCC'
         }
     });
 
     return (
-        <View style={styles.outter} onClick={function () { console.log(23) }}>
+        <ScrollView style={styles.outter} onClick={function () { console.log(23) }}>
             <Image
                 style={styles.backgroundImg}
                 source={require('../img/login-background.png')}
@@ -194,6 +214,8 @@ export default function Login() {
                 <TextInput
                     style={styles.inputBox_input}
                     placeholder='사원번호를 입력해 주세요'
+                    onChangeText={onChangeUserID}
+                    value={user_id}
                 />
                 <Image
                     style={styles.inputBox_icon}
@@ -226,25 +248,27 @@ export default function Login() {
             <View style={styles.btBox}>
                 <Text style={styles.btBox_text}>자동로그인</Text>
                 <View style={styles.btBox_text_margin} />
-                <SwitchButton 
+                <SwitchButton
                     style={styles.btBox_bt}
-                    value={auto_login_value} 
-                    onPress={auto_login_onclick} 
+                    value={auto_login_value}
+                    onPress={auto_login_onclick}
                 />
                 <View style={styles.btBox_bt_margin} />
                 <Text style={styles.btBox_text}>사원번호 저장</Text>
                 <View style={styles.btBox_text_margin} />
-                <SwitchButton 
-                    value={save_userID_value} 
-                    onPress={save_userID_onclick} 
+                <SwitchButton
+                    value={save_userID_value}
+                    onPress={save_userID_onclick}
                 />
             </View>
-            <TouchableOpacity style={styles.logiButton}>
+            <TouchableOpacity style={styles.logiButton} onPress={onClickLoginButton}>
                 <Text style={styles.logiButton_text}>Login</Text>
             </TouchableOpacity>
             <View style={styles.footer}>
                 <Text style={styles.footer_text}>Don’t have an account ? </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={function() {
+                    setPage('createUser');
+                }}>
                     <Text style={styles.link_bt}>Sign Up</Text>
                 </TouchableOpacity>
                 <View style={styles.footer_bar} />
@@ -252,7 +276,7 @@ export default function Login() {
                     <Text style={styles.link_bt}>Forget Password</Text>
                 </TouchableOpacity>
             </View>
-            
-        </View>
+
+        </ScrollView>
     )
 }

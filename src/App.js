@@ -13,26 +13,28 @@ import {
 
 
 import Alert from './page/alert.js';
-import * as login from './page/login.js';
+import * as main from './page/main.js';
+import * as contract from './page/contract.js';
 import * as createUser from './page/createUser.js';
 
 
 const pageList = {
-  login: login,
-  createUser: createUser
+  main: main,
+  createUser: createUser,
+  contract: contract,
 }
 
 
 const App = () => {
-  // const [page, setpage] = useState('login');
-  const [page, setpage] = useState('createUser');
+  // const [page, setpage] = useState('main');
+  // const [page, setpage] = useState('createUser');
+  const [page, setpage] = useState('contract');
   pageName = page;
   _setPage = setpage;
 
   const [alertData, setAlertData] = useState({ isView: false })
   _alertData = alertData;
   _setAlertData = setAlertData;
-
   
   const Page = pageList[page].Page;
   return (
@@ -104,3 +106,10 @@ BackHandler.addEventListener('hardwareBackPress', function () {
     return true;
   }
 })
+
+export let userData = {
+  isLogin: false
+}
+export function setUserData(data) {
+  userData = data;
+}

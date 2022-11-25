@@ -8,15 +8,56 @@ import {
     TextInput,
     Keyboard,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Button
 } from 'react-native';
 
 import SwitchButton from '../comp/switchButton.js';
-import { alert, setPage } from '../App.js';
+import { alert, setPage, userData, setUserData } from '../App.js';
 
 
-
+let _setIsLogin;
 export function Page() {
+    const [isLogin, setIsLogin] = useState(userData.isLogin);
+    _setIsLogin = function(flag) {
+        setIsLogin(flag);
+    }
+
+    return isLogin ? <Main /> : <Login />
+}
+function Main() {
+    const styles = StyleSheet.create({
+        outter: {
+            position: 'absolute',
+            bottom: 0,
+            width: '100%',
+            height: '100%',
+        },
+        title: {
+            fontSize: 60 * config.ratio.width,
+            margin: 20 * config.ratio.width,
+        },
+        bt: {
+            margin: 20 * config.ratio.width,
+        }
+    })
+    return (
+        <View style={styles.outter}>
+            <Text style={styles.title}>main</Text>
+            <Button title='logout' style={styles.bt} onPress={function() {
+                let temp = {...userData};
+                temp.isLogin = false;
+                setUserData(temp);
+                _setIsLogin(false);
+            }} />
+            <Button title='계약서 작성' style={styles.bt} onPress={function() {
+                setPage('contract');
+            }} />
+        </View>
+    )
+}
+
+function Login() {
     const [auto_login_value, set_auto_login] = useState(false);
     function auto_login_onclick() {
         set_auto_login(!auto_login_value);
@@ -32,6 +73,9 @@ export function Page() {
     function onChangeUserID(text) {
         set_user_id(text);
     }
+    function onChangePassword(text) {
+        set_password(text)
+    }
 
     // const [isClickInput, setisClickInput] = useState(false);
 
@@ -43,14 +87,26 @@ export function Page() {
     // });
 
     function onClickLoginButton() {
-        alert({
-            img: 'login',
-            bold: '등록되지 않은 회원입니다.\n정식 딜러 인증을 위해 회원가입을 해주세요',
-            thin: '본 서비스는 회원가입 후 이용이 가능합니다',
-            callback: function () {
-                console.log('callback')
-            }
-        })
+        console.log(user_id, password)
+        if(
+            (user_id !== 'test') ||
+            (password !== 'test')
+        ) {
+            alert({
+                img: 'login',
+                bold: '등록되지 않은 회원입니다.\n정식 딜러 인증을 위해 회원가입을 해주세요',
+                thin: '본 서비스는 회원가입 후 이용이 가능합니다',
+                callback: function () {
+                    console.log('callback')
+                }
+            })
+        }
+        else {
+            let temp = {...userData};
+            temp.isLogin = true;
+            setUserData(temp);
+            _setIsLogin(true);
+        }
     }
 
     const styles = StyleSheet.create({
@@ -230,6 +286,7 @@ export function Page() {
                 <TextInput
                     style={styles.inputBox_input}
                     placeholder='비밀번호를 입력해 주세요'
+                    onChangeText={onChangePassword}
                     secureTextEntry={true}
                 />
                 <Image

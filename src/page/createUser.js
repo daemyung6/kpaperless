@@ -17,7 +17,7 @@ import StatusBar from '../comp/status-bar.js';
 
 
 export function onClickBack() {
-    setPage('login');
+    setPage('main');
 }
 export function Page() {
     const [nowStep, setNowStep] = useState(0);
@@ -28,12 +28,17 @@ export function Page() {
             width: '100%',
             height: '100%',
         },
+        margin: {
+            height: config.ratio.height * 45
+        }
     });
 
     return (
         <ScrollView style={styles.outter} >
             <Header title={'회원가입'} subtitle={'Sign up'} onBack={onClickBack}/>
+            <View style={styles.margin} />
             <StatusBar
+                style={styles.StatusBar}
                 items={[
                     '회원유형선택',
                     '회원약관동의',

@@ -16,7 +16,12 @@ const imgList = {
         src : require('../img/alert-img-login.png'),
         width: 399.6,
         height: 397.83,
-    }
+    },
+    error : {
+        src : require('../img/alert-img-error.png'),
+        width: 316,
+        height: 316,
+    },
 }
 
 function Alert(props) {

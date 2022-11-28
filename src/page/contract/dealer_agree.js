@@ -19,15 +19,22 @@ import * as agreeText from '../../agree-text.js';
 import { onClickBack, grobal_styles, setOnClickBack } from '../contract.js'; 
 
 
-export default function Dealer_Agree({nextPage, contractData}) {
+export default function Dealer_Agree({nextPage, contractData, setContractData}) {
     const [nowStep, setNowStep] = useState(0);
     setOnClickBack(function() {
+        if(isViewMore) {
+            onClickMoreBt();
+            return
+        }
         setPage('main');
     })
 
-    const [isCheckBox, setIsCheckBox] = useState(false);
+    const [isCheckBox, setisCheckBox] = useState(contractData.dealer_agree);
     function onClickCheckBox() {
-        setIsCheckBox(!isCheckBox);
+        contractData.dealer_agree = !contractData.dealer_agree;
+        setContractData(contractData);
+
+        setisCheckBox(!isCheckBox);
     }
 
     const [isViewMore, setIsViewMore] = useState(false);
@@ -217,7 +224,7 @@ export default function Dealer_Agree({nextPage, contractData}) {
                 <TouchableOpacity style={styles.list_item_bt_box} onPress={onClickMoreBt}>
                     <CheckBox 
                         style={styles.checkBox}
-                        value={isCheckBox} 
+                        value={contractData.dealer_agree} 
                         onPress={onClickCheckBox} 
                     />
                     <Text style={styles.check_text_red}>{'(필수) '}</Text>

@@ -1,0 +1,9 @@
+https://dev-yakuza.posstree.com/ko/react-native/android-running-on-device/
+
+
+
+# cd android
+./gradlew assembleRelease
+
+
+android/app/build/outputs/apk/release/app-release.apk

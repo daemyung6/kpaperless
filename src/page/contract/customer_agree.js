@@ -19,19 +19,29 @@ import * as agreeText from '../../agree-text.js';
 import { onClickBack, grobal_styles, setOnClickBack } from '../contract.js'; 
 
 
-export default function Customer_Agree({nextPage, contractData}) {
+export default function Customer_Agree({nextPage, contractData, setContractData}) {
     setOnClickBack(function() {
+        if(isViewMore) {
+            onClickMoreBt();
+            return;
+        }
         nextPage(-1)
     })
 
-    const [isCheckBox1, setIsCheckBox1] = useState(false);
+    const [isCheckBox1, setisCheckBox1] = useState(contractData.customer_agree1);
     function onClickCheckBox1() {
-        setIsCheckBox1(!isCheckBox1);
+        contractData.customer_agree1 = !contractData.customer_agree1;
+        setContractData(contractData);
+
+        setisCheckBox1(!isCheckBox1);
     }
 
-    const [isCheckBox2, setIsCheckBox2] = useState(false);
+    const [isCheckBox2, setisCheckBox2] = useState(contractData.customer_agree2);
     function onClickCheckBox2() {
-        setIsCheckBox2(!isCheckBox2);
+        contractData.customer_agree2 = !contractData.customer_agree2;
+        setContractData(contractData);
+
+        setisCheckBox2(!isCheckBox2);
     }
 
     const [isViewMore, setIsViewMore] = useState(false);
@@ -51,7 +61,7 @@ export default function Customer_Agree({nextPage, contractData}) {
             })
         }
         else {
-
+            nextPage(1)
         }
     }
 
@@ -268,7 +278,7 @@ export default function Customer_Agree({nextPage, contractData}) {
                         <Text style={styles.moreData_title}>딜러/고객용 이용약관 확인</Text>
                         <View style={styles.moreData_text}>
                             <ScrollView >
-                                <Text style={styles.moreData_text_black}>{agreeText.customer}</Text>
+                                <Text style={styles.moreData_text_black}>{agreeText.customer()}</Text>
                             </ScrollView>
                         </View>
                             <TouchableOpacity onPress={onClickMoreBt} style={styles.moreData_bt}>

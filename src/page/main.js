@@ -13,12 +13,22 @@ import {
 } from 'react-native';
 
 import SwitchButton from '../comp/switchButton.js';
-import { alert, setPage, userData, setUserData } from '../App.js';
+import { alert, setPage, userData, setUserData, } from '../App.js';
 
+
+let _onClickBack;
+export function onClickBack() {
+    if(typeof _onClickBack === 'function') {
+        _onClickBack();
+        return
+    }
+    return false
+}
 
 let _setIsLogin;
 export function Page() {
     const [isLogin, setIsLogin] = useState(userData.isLogin);
+    // const [isLogin, setIsLogin] = useState(true);
     _setIsLogin = function(flag) {
         setIsLogin(flag);
     }
@@ -39,22 +49,114 @@ function Main() {
         },
         bt: {
             margin: 20 * config.ratio.width,
+        },
+        main_img: {
+            width: config.ratio.width * 1200,
+            height: undefined,
+            aspectRatio: 1200 / 1920,
+        },
+        contract_bt1: {
+            position: 'absolute',
+            width: 340 * config.ratio.width,
+            height: 340 * config.ratio.width,
+            top: 1335* config.ratio.width,
+            left: 160* config.ratio.width,
+        },
+        contract_bt2: {
+            position: 'absolute',
+            width: 340 * config.ratio.width,
+            height: 340 * config.ratio.width,
+            top: 1335* config.ratio.width,
+            left: 700* config.ratio.width,
+        },
+        menu: {
+            position: 'absolute',
+            width: 100 * config.ratio.width,
+            height: 100 * config.ratio.width,
+            top: 100* config.ratio.width,
+            right: 50* config.ratio.width,
+        },
+        close: {
+            position: 'absolute',
+            width: 100 * config.ratio.width,
+            height: 100 * config.ratio.width,
+            top: 60* config.ratio.width,
+            right: 700 * config.ratio.width,
+        },
+        bt1: {
+            position: 'absolute',
+            width: 252 * config.ratio.width,
+            height: 170 * config.ratio.width,
+            top: 0* config.ratio.width,
+            right: 470 * config.ratio.width,
+        },
+        bt2: {
+            position: 'absolute',
+            width: 252 * config.ratio.width,
+            height: 170 * config.ratio.width,
+            top: 0* config.ratio.width,
+            right: 223 * config.ratio.width,
+        },
+        list_bt: {
+            position: 'absolute',
+            width: 710 * config.ratio.width,
+            height: 170 * config.ratio.width,
+            top: 168 * config.ratio.width,
+            right: 0 * config.ratio.width,
         }
     })
-    return (
-        <View style={styles.outter}>
-            <Text style={styles.title}>main</Text>
-            <Button title='logout' style={styles.bt} onPress={function() {
-                let temp = {...userData};
-                temp.isLogin = false;
-                setUserData(temp);
-                _setIsLogin(false);
-            }} />
-            <Button title='계약서 작성' style={styles.bt} onPress={function() {
-                setPage('contract');
-            }} />
-        </View>
-    )
+
+    const [isMenu, setIsmenu] = useState(false);
+    const [menuNum, set_menuNum] = useState(0);
+
+    return (<>
+        {
+            !isMenu && <View style={styles.outter}>
+                <Image style={styles.main_img} source={require('../img/login-img.jpg')} />
+                <TouchableOpacity style={styles.contract_bt1} onPress={function() {
+                    setPage('contract')
+                }}></TouchableOpacity>
+                <TouchableOpacity style={styles.contract_bt2} onPress={function() {
+                    setPage('contract')
+                }}></TouchableOpacity>
+
+                <TouchableOpacity style={styles.menu} onPress={function() {
+                    setIsmenu(true);
+                    _onClickBack = function() {
+                        setIsmenu(false);
+                        _onClickBack = null
+                    }
+                }}></TouchableOpacity>
+            </View>
+        }
+        {
+            (isMenu && (menuNum === 0)) && <View style={styles.outter}>
+            <Image style={styles.main_img} source={require('../img/login-img-1.jpg')} />
+            <TouchableOpacity style={styles.close} onPress={function() {
+                setIsmenu(false);
+                _onClickBack = null
+            }}></TouchableOpacity>
+            <TouchableOpacity style={styles.bt2} onPress={function() {
+                set_menuNum(1)
+            }}></TouchableOpacity>
+            <TouchableOpacity style={styles.list_bt} onPress={function() {
+                setPage('list')
+            }}></TouchableOpacity>
+        </View> 
+        }
+        {
+            (isMenu && (menuNum === 1)) && <View style={styles.outter}>
+            <Image style={styles.main_img} source={require('../img/login-img-2.jpg')} />
+            <TouchableOpacity style={styles.close} onPress={function() {
+                setIsmenu(false);
+                _onClickBack = null
+            }}></TouchableOpacity>
+            <TouchableOpacity style={styles.bt1} onPress={function() {
+                set_menuNum(0)
+            }}></TouchableOpacity>
+        </View> 
+        }
+    </>)
 }
 
 function Login() {
@@ -168,7 +270,7 @@ function Login() {
             marginLeft: 'auto',
             marginRight: 'auto',
             fontFamily: config.font.Poppins[500],
-            color: 'rgba(0, 0, 0, 0.51)',
+            color: 'black',
             fontSize: 27 * config.ratio.width
         },
         inputBox_icon: {
@@ -181,6 +283,10 @@ function Login() {
         inputBox_clearButton: {
             position: 'absolute',
             right: config.ratio.width * 32,
+            width: config.ratio.width * 70,
+            height: config.ratio.width * 70,
+        },
+        inputBox_clearButton_img: {
             width: undefined,
             height: config.ratio.width * 70,
             aspectRatio: 1 / 1,
@@ -277,16 +383,21 @@ function Login() {
                     style={styles.inputBox_icon}
                     source={require('../img/login-user-icon.png')}
                 />
-                <Image
-                    style={styles.inputBox_clearButton}
-                    source={require('../img/login-clear-icon.png')}
-                />
+                <TouchableOpacity style={styles.inputBox_clearButton} onPress={function() {
+                    set_user_id('');
+                }}>
+                    <Image
+                        style={styles.inputBox_clearButton_img}
+                        source={require('../img/login-clear-icon.png')}
+                    />
+                </TouchableOpacity>
             </View>
             <View style={styles.inputBox}>
                 <TextInput
                     style={styles.inputBox_input}
                     placeholder='비밀번호를 입력해 주세요'
                     onChangeText={onChangePassword}
+                    value={password}
                     secureTextEntry={true}
                 />
                 <Image
@@ -297,10 +408,14 @@ function Login() {
                     style={styles.inputBox_pw_hide_icon}
                     source={require('../img/login-pw-hide-icon.png')}
                 />
-                <Image
-                    style={styles.inputBox_clearButton}
-                    source={require('../img/login-clear-icon.png')}
-                />
+                <TouchableOpacity style={styles.inputBox_clearButton} onPress={function() {
+                    set_password('');
+                }}>
+                    <Image
+                        style={styles.inputBox_clearButton_img}
+                        source={require('../img/login-clear-icon.png')}
+                    />
+                </TouchableOpacity>
             </View>
             <View style={styles.btBox}>
                 <Text style={styles.btBox_text}>자동로그인</Text>

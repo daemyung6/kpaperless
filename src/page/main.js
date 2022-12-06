@@ -111,7 +111,7 @@ function Main() {
 
     return (<>
         {
-            !isMenu && <View style={styles.outter}>
+            !isMenu && <ScrollView style={styles.outter}>
                 <Image style={styles.main_img} source={require('../img/login-img.jpg')} />
                 <TouchableOpacity style={styles.contract_bt1} onPress={function() {
                     setPage('contract')
@@ -127,7 +127,7 @@ function Main() {
                         _onClickBack = null
                     }
                 }}></TouchableOpacity>
-            </View>
+            </ScrollView>
         }
         {
             (isMenu && (menuNum === 0)) && <View style={styles.outter}>
@@ -153,6 +153,9 @@ function Main() {
             }}></TouchableOpacity>
             <TouchableOpacity style={styles.bt1} onPress={function() {
                 set_menuNum(0)
+            }}></TouchableOpacity>
+            <TouchableOpacity style={styles.list_bt} onPress={function() {
+                setPage('card')
             }}></TouchableOpacity>
         </View> 
         }
@@ -191,8 +194,8 @@ function Login() {
     function onClickLoginButton() {
         console.log(user_id, password)
         if(
-            (user_id !== 'test') ||
-            (password !== 'test')
+            (user_id !== '1234') ||
+            (password !== '1234')
         ) {
             alert({
                 img: 'login',
@@ -357,6 +360,14 @@ function Login() {
             marginLeft: 44 * config.ratio.width,
             marginRight: 44 * config.ratio.width,
             backgroundColor: '#002DCC'
+        },
+        main_footer_img: {
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: config.ratio.height * 16,
+            height: undefined,
+            width: config.ratio.width * 430,
+            aspectRatio: 430 / 111,
         }
     });
 
@@ -448,6 +459,7 @@ function Login() {
                     <Text style={styles.link_bt}>Forget Password</Text>
                 </TouchableOpacity>
             </View>
+            <Image style={styles.main_footer_img} source={require('../img/main-footer-img.png')} />
 
         </ScrollView>
     )

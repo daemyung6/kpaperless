@@ -13,31 +13,18 @@ import {
 
 import Header from '../../comp/header.js';
 
-import { alert } from '../../App.js';
 import { onClickBack, grobal_styles, setOnClickBack } from '../contract.js'; 
 import { WebView } from 'react-native-webview';
 import html from '../../sign.html.js';
 
 
-export default function Signature({nextPage, contractData, setContractData}) {
+export default function Per_4({nextPage, contractData, setContractData}) {
     setOnClickBack(function() {
         nextPage(-1)
     })
 
     function onClick_Page_ok_bt() {
-        if(
-            (signData1.length === 0) ||
-            (signData2.length === 0)
-        ) {
-            alert({
-                img: 'error',
-                bold: '서명이 필요 합니다.',
-                callback: function () {}
-            })
-            return;
-        }
-        set_isAgreeView(true);
-        // nextPage(1);
+        nextPage(1);
     }
 
     const [zoom, setZoom] = useState(100);
@@ -45,9 +32,6 @@ export default function Signature({nextPage, contractData, setContractData}) {
     const [isClickType, set_isClickType] = useState(false);
     const [signData1, set_signData1] = useState('')
     const [signData2, set_signData2] = useState('');
-
-    const [isAgreeView, set_isAgreeView] = useState(false);
-    const [isPassView, set_isPassView] = useState(false);
 
     let WebViewRef;
     function getWebViewRef(e) {
@@ -61,8 +45,8 @@ export default function Signature({nextPage, contractData, setContractData}) {
             height: '100%',
         },
         canvas_view: {
-            width: config.ratio.width * 940 * (zoom / 100),
-            height: config.ratio.width * 1362 * (zoom / 100),
+            width: config.ratio.width * 863 * (zoom / 100),
+            height: config.ratio.width * 1322 * (zoom / 100),
             marginLeft: 'auto',
             marginRight: 'auto',
         },
@@ -162,65 +146,34 @@ export default function Signature({nextPage, contractData, setContractData}) {
         },
         signData1: {
             position: 'absolute',
-            top: '90%',
-            left: '70%',
+            top: '80%',
+            left: '50%',
             width: undefined,
-            height: config.ratio.width * 150 * (zoom / 100),
+            height: config.ratio.width * 413 * (zoom / 100),
             aspectRatio: 931 / 413,
         },
         signData2: {
             position: 'absolute',
-            top: '90%',
-            left: '20%',
+            top: '80%',
+            left: '-10%',
             width: undefined,
-            height: config.ratio.width * 150 * (zoom / 100),
+            height: config.ratio.width * 413 * (zoom / 100),
             aspectRatio: 931 / 413,
-        },
-        agree_img : {
-            width: 1021 * config.ratio.width,
-            height: undefined,
-            aspectRatio: 1021 / 1613,
-        },
-        pass_img : {
-            width: 1021 * config.ratio.width,
-            height: undefined,
-            aspectRatio: 1021 / 1580,
-        },
+        }
     });
 
 
     return (<>
         <View style={styles.outter} >
             <Header 
-                title={'전 자 서 명'} 
+                title={'성 능 점 검 표'} 
                 subtitle={`계약서 등록번호 ${contractData.name}`} 
                 onBack={onClickBack}
             />
             <ScrollView >
                 <ScrollView horizontal={zoom < 120 ? false : true}>
                     <View style={styles.canvas_view}>
-                        <Image style={styles.canvas_view} source={require('../../img/contract.png')} />
-                        {
-                            signData1.length > 0 && <Image style={styles.signData1} source={ {uri: signData1}} />
-                        }
-                        {
-                            signData2.length > 0 && <Image style={styles.signData2} source={ {uri: signData2}} />
-                        }
-                        <TouchableOpacity style={styles.sign_bt1} onPress={function() {
-                            set_isSign(true);
-                            set_isClickType(true);
-                            
-                        }}>
-                            <Image style={styles.sign_img} source={require('../../img/sign-bt.png')} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.sign_bt2} onPress={function() {
-                            set_isSign(true);
-                            set_isClickType(false);
-                        }}>
-                            <Image style={styles.sign_img} source={require('../../img/sign-bt.png')} />
-                        </TouchableOpacity>
-                        
-                        
+                        <Image style={styles.canvas_view} source={require('../../img/per-4.png')} />
                     </View>
                 </ScrollView>
             </ScrollView>
@@ -247,72 +200,5 @@ export default function Signature({nextPage, contractData, setContractData}) {
                 <Text style={grobal_styles.page_ok_bt_text} >확인</Text>
             </TouchableOpacity>
         </View>
-        {
-            isSign && <View style={styles.popup}>
-                <View style={styles.popup_inner}>
-                    <Text style={styles.popup_title}>본 인 서 명</Text>
-                    <View style={styles.popup_web_box}>
-                    <WebView 
-                        ref={getWebViewRef}
-                        style={styles.WebView}
-                        source={ {html: html} } 
-                        javaScriptEnabled={true}
-                        onMessage={(event) => {
-                            const data = JSON.parse(event.nativeEvent.data);
-                            if(isClickType) {
-                                set_signData1(data.data);
-                                console.log('set_signData1')
-                            }
-                            else {
-                                set_signData2(data.data);
-                                console.log('set_signData2')
-                            }
-
-                            set_isSign(false);
-
-                        }
-                    }
-                    />
-                    </View>
-                    <Text style={styles.popup_text}>계약 내용을 확인 한 후 자필 서명을 해주세요</Text>
-                    <View style={styles.bt_line}>
-                        <TouchableOpacity style={styles.bt}>
-                            <Text style={styles.bt_text}>날짜표시</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.bt} onPress={function() {
-                            WebViewRef.postMessage('clear');
-                        }}>
-                            <Text style={styles.bt_text}>다시쓰기</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.bt, {
-                            backgroundColor: '#1334A9'
-                        }]} onPress={function() {
-                            WebViewRef.postMessage('get');
-                        }}>
-                            <Text style={styles.bt_text}>서명완료</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        }
-        {
-            isAgreeView && <View style={styles.popup}>
-                <TouchableOpacity onPress={function() {
-                    set_isAgreeView(false);
-                    set_isPassView(true)
-                }}>
-                    <Image style={styles.agree_img} source={require('../../img/signature-agree-img.png')} />
-                </TouchableOpacity>
-            </View>
-        }
-        {
-            isPassView && <View style={styles.popup}>
-                <TouchableOpacity onPress={function() {
-                    nextPage(1);
-                }}>
-                    <Image style={styles.pass_img} source={require('../../img/signature-pass.png')} />
-                </TouchableOpacity>
-            </View>
-        }
     </>)
 }

@@ -239,6 +239,9 @@ export default function Dealer_Agree({nextPage, contractData, setContractData}) 
                          />
                     </TouchableOpacity>
                 </TouchableOpacity>
+                
+                <Image style={grobal_styles.main_footer} source={require('../../img/main-footer-img.png')} />
+
             </ScrollView>
             <TouchableOpacity style={grobal_styles.page_ok_bt} onPress={onClick_Page_ok_bt}>
                 <Text style={grobal_styles.page_ok_bt_text} >확인</Text>

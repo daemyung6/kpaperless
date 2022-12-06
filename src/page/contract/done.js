@@ -70,7 +70,7 @@ export default function Done({nextPage, contractData, setContractData}) {
             <ScrollView >
                <Image
                     style={styles.main_img}
-                    source={require('../../img/dont-main-img.png')} 
+                    source={require('../../img/done-main-img.png')} 
                 />
                 <Text style={styles.body}>{text}</Text>
             </ScrollView>

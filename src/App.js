@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Image,
   BackHandler,
   ToastAndroid,
 } from 'react-native';
@@ -18,18 +14,22 @@ import * as main from './page/main.js';
 import * as contract from './page/contract.js';
 import * as createUser from './page/createUser.js';
 import * as list from './page/list.js';
+import * as card from './page/card.js';
 
 const pageList = {
   main: main,
   createUser: createUser,
   contract: contract,
   list: list,
+  card: card
 }
 
 
 const App = () => {
   console.log('render App');
   const [page, setpage] = useState('main');
+  // const [page, setpage] = useState('contract');
+  
 
   pageName = page;
   _setPage = setpage;
@@ -48,12 +48,21 @@ const App = () => {
   const [date, setDate] = useState(new Date())
   _date = date;
   _setDate = setDate;
+
+  const [is_start_img_view, set_is_start_img_view] = useState(true)
+
+  setTimeout(function() {
+    set_is_start_img_view(false)
+  }, 1000)
   
   const Page = pageList[page].Page;
   return (
     <View style={styles.App}>
-
-      <Page />
+      
+      { is_start_img_view 
+        ? <Image style={styles.start_img} source={require('./img/start-img.png')} /> 
+        : <Page />
+      }
 
       {alertData.isView && <Alert data={alertData} />}
       {confirmData.isView && <Confirm data={confirmData} />}
@@ -83,6 +92,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
     width: '100%',
     height: '100%',
+  },
+  start_img: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    aspectRatio: 1200 / 1920,
   }
 });
 
@@ -151,10 +168,7 @@ export function setPage(name) {
 
 let isReadyExit = false;
 BackHandler.addEventListener('hardwareBackPress', function () {
-  if (
-    (typeof pageList[pageName].onClickBack === 'undefined') ||
-    !pageList[pageName].onClickBack()
-  ) {
+  if (typeof pageList[pageName].onClickBack === 'undefined') {
     if (!isReadyExit) {
       ToastAndroid.show("버튼을 한번 더 누르면 종료됩니다.", ToastAndroid.SHORT);
       isReadyExit = true;

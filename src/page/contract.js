@@ -35,12 +35,24 @@ export const grobal_styles = StyleSheet.create({
         fontFamily: config.font.Inter[600],
         fontSize: 40 * config.ratio.width,
         color: 'white',
+    },
+    main_footer: {
+        marginTop: 80 * config.ratio.height,
+        marginRight: 40 * config.ratio.width,
+        marginLeft: 'auto',
+        height: undefined,
+        width: config.ratio.width * 430,
+        aspectRatio: 430 / 111,
     }
 })
 
 import Dealer_Agree from './contract/dealer_agree.js';
 import Customer_Agree from './contract/customer_agree.js';
 import Info from './contract/info.js';
+import Per_1 from './contract/per_1.js';
+import Per_2 from './contract/per_2.js';
+import Per_3 from './contract/per_3.js';
+import Per_4 from './contract/per_4.js';
 import payment from './contract/payment.js';
 import Pay_type from './contract/pay_type.js';
 import Totall_info from './contract/totall_info';
@@ -82,10 +94,15 @@ export function Page() {
     function nextPage(idx) {
         setPageIdx(pageIdx + idx);
     }
+    console.log('pageIdx', pageIdx)
     const pageList = [
         Dealer_Agree,
         Customer_Agree,
         Info,
+        Per_1,
+        Per_2,
+        Per_3,
+        Per_4,
         payment,
         Pay_type,
         Totall_info,
